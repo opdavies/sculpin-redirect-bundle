@@ -22,13 +22,19 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-    * {@inheritdoc}
-    */
-    public function getConfigTreeBuilder()
+     * {@inheritdoc}
+     */
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
+        // Symfony Config 5 removed the argument-free TreeBuilder
+        // constructor and the root() method together, and Symfony 7 --
+        // Sculpin 4's dependency -- makes the interface's TreeBuilder
+        // return type native: the root name is the constructor
+        // argument now, getRootNode() replaces root(), and the
+        // return type must be declared.
+        $treeBuilder = new TreeBuilder('sculpin_redirect');
 
-        $rootNode = $treeBuilder->root('sculpin_redirect');
+        $rootNode = $treeBuilder->getRootNode();
 
         return $treeBuilder;
     }
